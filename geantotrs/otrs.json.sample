@@ -1,0 +1,6 @@
+{
+    "server_uri":  "https://tts.geant.net",
+    "webservice_name": "GenericTicketConnector",
+    "username": "username",
+    "password": "password"
+}
