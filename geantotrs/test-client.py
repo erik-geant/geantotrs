@@ -1,14 +1,24 @@
 import json
 
+import click
 from otrs.ticket.template import GenericTicketConnectorSOAP
 from otrs.client import GenericInterfaceClient
 from otrs.ticket.objects import Ticket, Article, DynamicField, Attachment
 
 
-def cli():
-    with open("otrs.json") as f:
-        params = json.loads(f.read())
-    
+def validate_params(ctx, param, value):
+    return json.loads(value.read())
+
+
+@click.command()
+@click.option(
+    "--params",
+    required=True,
+    type=click.File(),
+    callback=validate_params,
+    default=open("otrs.json"))
+def cli(params):
+ 
     client = GenericInterfaceClient(
         params["server_uri"],
         tc=GenericTicketConnectorSOAP(params["webservice_name"]))

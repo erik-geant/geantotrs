@@ -6,6 +6,7 @@ setup(
     description="otrs experiments",
     packages=find_packages(),
     install_requires=[
+        "click",
         "python-otrs",
     ]
 )
