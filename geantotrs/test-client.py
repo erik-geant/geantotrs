@@ -1,13 +1,28 @@
 import json
 
 import click
+import jsonschema
 from otrs.ticket.template import GenericTicketConnectorSOAP
 from otrs.client import GenericInterfaceClient
 from otrs.ticket.objects import Ticket, Article, DynamicField, Attachment
 
 
 def validate_params(ctx, param, value):
-    return json.loads(value.read())
+    schema = {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "properties": {
+            "server_uri": {"type": "string"},
+            "webservice_name": {"type": "string"},
+            "username": {"type": "string"},
+            "password": {"type": "string"},
+        },
+        "required": ["server_uri", "webservice_name", "username", "password"],
+        "additionalProperties": False
+    }
+    parsed_params = json.loads(value.read())
+    jsonschema.validate(parsed_params, schema)
+    return parsed_params
 
 
 @click.command()
